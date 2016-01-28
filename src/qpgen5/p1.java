@@ -5,6 +5,14 @@
  */
 package qpgen5;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author erl
@@ -14,8 +22,23 @@ public class p1 extends javax.swing.JPanel {
     /**
      * Creates new form p1
      */
-    public p1() {
+    public p1() throws  SQLException, ClassNotFoundException {
         initComponents();
+        Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+       Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbb","root","asdfgzxc");    
+       
+        Statement stmt = conn.createStatement();
+        
+ 
+        String sql = "SELECT * from programs;";
+        ResultSet rs = stmt.executeQuery(sql);
+      //STEP 5: Extract data from result set
+      while(rs.next()){
+          String id = rs.getString("program_name");
+         jComboBox1.addItem(id);
+         System.out.println(id);
+      }
+      
     }
 
     /**
@@ -52,9 +75,11 @@ public class p1 extends javax.swing.JPanel {
 
         jLabel5.setText("Teacher_ID");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox3.addActionListener(new java.awt.event.ActionListener() {
@@ -145,6 +170,38 @@ this.setVisible(false);
         
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        try {
+            Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(p1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       Connection conn=null;    
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbb","root","asdfgzxc");
+        } catch (SQLException ex) {
+            Logger.getLogger(p1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+        Statement stmt;
+        try {
+            stmt = conn.createStatement();
+       
+        
+        String aa=jComboBox1.getSelectedItem().toString();
+        String sql = "SELECT * from "+aa+";";
+        ResultSet rs = stmt.executeQuery(sql);
+      //STEP 5: Extract data from result set
+      while(rs.next()){
+          String id = rs.getString("branches");
+         jComboBox2.addItem(id);
+         System.out.println(id);
+      }
+       } catch (SQLException ex) {
+            Logger.getLogger(p1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
